@@ -1,5 +1,4 @@
 
-
 void setup()
 {
   QTRinit(true);

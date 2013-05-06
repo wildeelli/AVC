@@ -15,8 +15,8 @@ void mtrInit()
    pinMode(dir_l, OUTPUT);
    pinMode(dir_r, OUTPUT);
    
-   analogWrite(pwm_l, 0);
-   analogWrite(pwm_r, 0);
+   analogWrite(pwm_l, LOW);
+   analogWrite(pwm_r, LOW);
 }
 void forwards(byte speed, int duration)
 {
@@ -36,7 +36,7 @@ void reverse(byte speed, int duration)
 {
   reverse(speed);
   delay(duration);
-  stop();
+  motorStop();
 }
 void reverse(byte speed)
 {
@@ -51,7 +51,7 @@ void strafeLeft(byte speed, int duration)
 {
   strafeLeft(speed);
   delay(duration);
-  stop();
+  motorStop();
 }
 void strafeLeft(byte speed)
 {
@@ -62,7 +62,7 @@ void strafeRight(byte speed, int duration)
 {
   strafeRight(speed);
   delay(duration);
-  stop();
+  motorStop();
 }
 void strafeRight(byte speed)
 {
@@ -73,7 +73,7 @@ void turnLeft(byte speed, int duration)
 {
   turnLeft(speed);
   delay(duration);
-  stop;
+  motorStop;
 }
 void turnLeft(byte speed)
 {
@@ -84,7 +84,7 @@ void turnRight(byte speed, int duration)
 {
   turnRight(speed);
   delay(duration);
-  stop();
+  motorStop();
 }
 void turnRight(byte speed)
 {
@@ -103,7 +103,7 @@ void motorRight(byte speed, byte direction)
   digitalWrite(pwm_r, speed);
 }
 
-void stop(){
-  analogWrite(pwm_l, 0);
-  analogWrite(pwm_r, 0);
+void motorStop(){
+  analogWrite(pwm_l, LOW);
+  analogWrite(pwm_r, HIGH);
 }
