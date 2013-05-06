@@ -1,7 +1,12 @@
-int pwm_l = 3;
-int pwm_r = 11;
-int dir_l = 12;
-int dir_r = 13;
+#define pwm_l 3
+#define pwm_r 11
+#define dir_l 12
+#define dir_r 13
+
+//int pwm_l = 3;
+//int pwm_r = 11;
+//int dir_l = 12;
+//int dir_r = 13;
 
 void mtrInit()
 {
@@ -84,6 +89,18 @@ void turnRight(byte speed, int duration)
 void turnRight(byte speed)
 {
   
+}
+
+void motorLeft(byte speed, byte direction)
+{
+  digitalWrite(dir_l, direction);
+  digitalWrite(pwm_l, speed);
+}
+
+void motorRight(byte speed, byte direction)
+{
+  digitalWrite(dir_r, direction);
+  digitalWrite(pwm_r, speed);
 }
 
 void stop(){
