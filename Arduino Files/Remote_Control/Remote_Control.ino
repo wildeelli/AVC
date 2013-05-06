@@ -1,7 +1,7 @@
-#define LEFT_FORWARDS
-#define RIGHT_FORWARDS
-#define LEFT_BACKWARDS
-#define RIGHT_BACKWARDS
+#define LEFT_FORWARDS 1
+#define RIGHT_FORWARDS 2
+#define LEFT_BACKWARDS 3
+#define RIGHT_BACKWARDS 4
 
 const int ledPin = 13;
 
@@ -16,23 +16,17 @@ void loop()
 {
   if (digitalRead(LEFT_FORWARDS))
     Serial.write(1);
-  else
-    Serial.write(-1);
-  if (digitalRead(RIGHT_FORWARDS))
-    Serial.write(2);
-  else
-    Serial.write(-2);
-  if (digitalRead(LEFT_BACKWARDS))
+  else if (digitalRead(LEFT_BACKWARDS))
     Serial.write(3);
   else
-    Serial.write(-3);
-  if (digitalRead(RIGHT_BACKWARDS))
+    Serial.write(5);
+    
+  if (digitalRead(RIGHT_FORWARDS))
+    Serial.write(2);
+  else if (digitalRead(RIGHT_BACKWARDS))
     Serial.write(4);
   else
-    Serial.write(-4);
-  
-  
-  
+    Serial.write(6);
   
   
 }
