@@ -25,11 +25,13 @@ void forwards(byte speed, int duration)
 }
 void forwards(byte speed)
 {
-  digitalWrite(dir_l, HIGH);
-  digitalWrite(dir_r, HIGH);
-  
-  analogWrite(pwm_l, speed);
-  analogWrite(pwm_r, speed);
+  motorLeft(speed, HIGH);
+  motorRight(speed, HIGH);
+//  digitalWrite(dir_l, HIGH);
+//  digitalWrite(dir_r, HIGH);
+//  
+//  analogWrite(pwm_l, speed);
+//  analogWrite(pwm_r, speed);
 }
 
 void reverse(byte speed, int duration)
@@ -40,11 +42,13 @@ void reverse(byte speed, int duration)
 }
 void reverse(byte speed)
 {
-  digitalWrite(dir_l, LOW);
-  digitalWrite(dir_r, LOW);
-  
-  analogWrite(pwm_l, speed);
-  analogWrite(pwm_r, speed);
+  motorLeft(speed, LOW);
+  motorRight(speed, HIGH);
+//  digitalWrite(dir_l, LOW);
+//  digitalWrite(dir_r, LOW);
+//  
+//  analogWrite(pwm_l, speed);
+//  analogWrite(pwm_r, speed);
 }
 
 void strafeLeft(byte speed, int duration)

@@ -51,6 +51,10 @@ void loop()
       motorRight(100, LOW);
     else if (incomingByte == 'd')
       motorRight(0, LOW);
+    else if (incomingByte == 'w')
+      forwards(100);
+    else if (incomingByte == 'x')
+      reverse(100);
       else motorStop();
     
   }
