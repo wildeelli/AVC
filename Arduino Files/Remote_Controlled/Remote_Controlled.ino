@@ -8,19 +8,32 @@
 #define REVERSE 2
 #define STOP 0
 
+#define pwm_r 3
+#define pwm_l 11
+#define dir_r 12
+#define dir_l 13
+
 const int ledPin = 13;
 int incomingByte;
-int left, right;
+//int left, right;
 
 void setup()
 {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
   delay(200);
+  pinMode(pwm_r, OUTPUT);
+  pinMode(dir_r, OUTPUT);  
+
 }
 
 void loop()
 {
+//    digitalWrite(dir_r, HIGH);
+//    analogWrite(pwm_r, 255);
+//    delay(500);
+//    digitalWrite(dir_r, LOW);
+//    delay(500);
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
 //    left = incomingByte >> 4;
@@ -40,21 +53,21 @@ void loop()
 //    else motorStop();
     
     if (incomingByte == 'q')
-      motorLeft(100, HIGH);
+      motorLeft(255, HIGH);
     else if (incomingByte == 'z')
-      motorLeft(100, LOW);
+      motorLeft(255, LOW);
     else if (incomingByte == 'a')
       motorLeft(0, LOW);
     else if (incomingByte == 'e')
-      motorRight(100, HIGH);
+      motorRight(255, HIGH);
     else if (incomingByte == 'c')
-      motorRight(100, LOW);
+      motorRight(255, LOW);
     else if (incomingByte == 'd')
       motorRight(0, LOW);
     else if (incomingByte == 'w')
-      forwards(100);
+      forwards(255);
     else if (incomingByte == 'x')
-      reverse(100);
+      reverse(255);
       else motorStop();
     
   }
