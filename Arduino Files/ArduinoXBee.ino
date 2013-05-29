@@ -17,11 +17,6 @@ int n_frame_to_xBee;      // size of the array
 char frame_from_xBee[256];
 int n_frame_from_xBee;
 
-int ex_flag=0;
-char data[64];
-int complete=0;
-int i=0;
-
 void setup()
 {
   // start two serial ports
@@ -31,8 +26,6 @@ void setup()
   //END TESTING
   
   xBeeSerial.begin(9600); // for communications with the radio
-  
-  mtrInit();
 }
 
 //MAIN CODE!!
@@ -79,32 +72,11 @@ int ReceiveXBee(int timeout)
   while ( xBeeSerial.available() > 0 )
   {
      in_byte = xBeeSerial.read();  // reads one byte from radio buffer
-     
-     if (in_byte==0x7E){
-       ex_flag=1;
-       i=1; complete=0;
-     }
-     if (ex_flag==1){
-       data[i]=in_byte;
-       i++;
-       Serial.print(data[i], HEX);
-     }
-     if (i==24){
-       ex_flag=0;
-       complete=1;
-     }
-     if (complete==1){
-       ExecuteCommand();
-     }
-     
-     
-     
-     
-//     frame_from_xBee[n_frame_from_xBee] = in_byte;
+     frame_from_xBee[n_frame_from_xBee] = in_byte;
      //Serial.print(frame_from_xBee[n_frame_from_xBee],HEX);  // 
-//     n_frame_from_xBee++;
+     n_frame_from_xBee++;
   }
-  return i;
+  return n_frame_from_xBee;
 }
 
 //DO ACTION
@@ -127,30 +99,83 @@ void PrintReceivedFrame()
 void ExecuteCommand()
 {
    //Response code for recieved
-   
-
-   char first=data[17], second=data[18], third=data[19];
-   if (first=='q'){
-     motorLeft(255, HIGH);
-   } else if (first=='z'){
-     motorLeft(255, LOW);
-   } else {
-     motorLeft(0, LOW);
-   }
-   
-   if (second=='e'){
-     motorRight(255, HIGH);
-   } else if (second=='c'){
-     motorRight(255, LOW);
-   } else {
-     motorRight(0, LOW);
-   }
-   
-   
-   
-   
-   
 }
 //Not called anywhere.
 
+
+
+
+
+
+// sends fixed string through xBee
+void SendToZB(){
+  
+  int j;
+  unsigned int check_sum_total = 0;
+  unsigned int CRC = 0;
+  
+   // delimiter
+  frame_to_xBee[0] = 0x7E;
+  // length
+  frame_to_xBee[1] = 0x00;
+  frame_to_xBee[2] = 0x16; // length
+  //API ID
+  frame_to_xBee[3] = 0x10; // tramsmission frame
+  frame_to_xBee[4] = 0x01;
+  // destination 64 bit address - broadcast
+  frame_to_xBee[5] = 0x00;
+  frame_to_xBee[6] = 0x00;
+  frame_to_xBee[7] = 0x00;
+  frame_to_xBee[8] = 0x00;
+  frame_to_xBee[9] = 0x00;
+  frame_to_xBee[10] = 0x00;
+  frame_to_xBee[11] = 0xFF;
+  frame_to_xBee[12] = 0xFF;
+  // destination 16 bit address - broadcast
+  frame_to_xBee[13] = 0xFF;
+  frame_to_xBee[14] = 0xFE;
+  // number of hops
+  frame_to_xBee[15] = 0x00;
+  //option
+  frame_to_xBee[16] = 0x00;
+  //data
+  frame_to_xBee[17] = '0';
+  frame_to_xBee[18] = '0';
+  frame_to_xBee[19] = '0';
+  frame_to_xBee[20] = '0';
+  frame_to_xBee[21] = '0';
+  frame_to_xBee[22] = '0';
+  frame_to_xBee[23] = '0';
+  frame_to_xBee[24] = '0';
+  
+  n_frame_to_xBee = 25;
+
+  // add CRC  
+ 
+  for ( j = 3 ; j < n_frame_to_xBee ; j++)
+  {
+    check_sum_total = check_sum_total + frame_to_xBee[j];
+  }
+  //Checksum to check the packet has not been lost
+  check_sum_total = check_sum_total & 0xFF;
+  CRC = 0xFF - check_sum_total;
+  //TO DO: add code to repeat transmission if checksum fails on recieving end.
+  
+  //Serial.println(CRC);
+  
+  frame_to_xBee[n_frame_to_xBee] = CRC;
+  //Puts CRC into the 25th place in the array frame_to_xBee
+  
+  n_frame_to_xBee++;
+  
+  //write code to transmit
+  for (j = 0; j < n_frame_to_xBee; j++)
+  {
+    //Write to both transmit, and to computer
+    xBeeSerial.write(frame_to_xBee[j]);
+    Serial.println(frame_to_xBee[j],HEX);
+  }
+  Serial.println("transmitting...");
+  //End Transmission
+}
 
